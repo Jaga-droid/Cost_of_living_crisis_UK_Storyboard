@@ -1,6 +1,19 @@
-.paraclass,.LineChartparaclass,.mytreelink{
+.LineChartparaclass,.mytreelink{
     display:list-item;
     height: 50px;
+    margin-top: 50px;
+    margin-bottom: 50px;
+    background-color: #fafafa;
+    border-width: 4px;
+    border-style: solid;
+    border-color: rgb(241, 61, 169);
+    font-family: Arial, Helvetica, sans-serif;
+    font-size:20px;
+    color:rgb(46, 12, 217);
+}
+.paraclass{
+    display:list-item;
+    height: 100px;
     margin-top: 50px;
     margin-bottom: 50px;
     background-color: #fafafa;
