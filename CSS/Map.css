@@ -1,0 +1,19 @@
+.mapsvg {
+    background-color: #5cdcef;
+    border-width: 4px;
+    border-style: solid;
+    border-color: rgb(14, 106, 219);
+}
+
+.tooltip {   
+    position: absolute;         
+    text-align: center;         
+    width: 80px;                    
+    height: 28px;                   
+    padding: 2px;               
+    font: 12px sans-serif;      
+    background: lightsteelblue; 
+    border: 0px;        
+    border-radius: 8px;         
+    pointer-events: none;           
+}

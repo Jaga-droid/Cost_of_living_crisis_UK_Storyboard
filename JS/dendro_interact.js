@@ -1,140 +1,127 @@
-const treeData = [
-  {
-    name: 'Top Level',
-    parent: 'null',
-    children: [
-      {
-        name: 'Level 2: A',
-        parent: 'Top Level',
-        children: [
-          { name: 'Son of A', parent: 'Level 2: A' },
-          { name: 'Daughter of A', parent: 'Level 2: A' },
-        ],
-      },
-      {
-        name: 'Level 2: B',
-        parent: 'Top Level',
-        children: [
-          { name: 'Son of B', parent: 'Level 2: B' },
-          { name: 'Daughter of B', parent: 'Level 2: B' },
-          { name: 'Daughter of B', parent: 'Level 2: B' },
-        ],
-      },
-    ],
-  },
-];
+// Set up the tree layout
+const width = window.innerWidth;
+const height = window.innerHeight;
+const margin = {top: 20, right: 50, bottom: 20, left: 70};
+const treeLayout = d3.tree().size([height, width]);
 
-const margin = { top: 20, right: 120, bottom: 20, left: 120 };
-const width = 960 - margin.right - margin.left;
-const height = 500 - margin.top - margin.bottom;
-let i = 0;
-const duration = 750;
-let root;
+// Select the SVG element and set its dimensions
+const svg = d3.select("svg")
+  .attr("width", width + margin.left + margin.right)
+  .attr("height", height + margin.top + margin.bottom)
+  .append("g")
+  .attr("transform", `translate(${margin.left},${margin.top})`);
 
-const tree = d3.tree().size([height, width]);
+// Load the data
+d3.json("data.json").then(data => {
 
-const diagonal = d3
-  .linkVertical()
-  .x(d => d.y)
-  .y(d => d.x);
+  // Assign the data to the root node and collapse it initially
+  const root = d3.hierarchy(data);
+  root.descendants().forEach(d => {
+    d.id = d.data.name; // Assign an ID to each node
+    d._children = d.children;
+    d.children = null;
+  });
 
+  // Call updateNodes to draw the nodes and links
+  updateNodes(root);
+});
 
-const svg = d3
-  .select('svg#tree')
-  .attr('width', width + margin.right + margin.left)
-  .attr('height', height + margin.top + margin.bottom)
-  .append('g')
-  .attr('transform', `translate(${margin.left},${margin.top})`);
+function updateNodes(source) {
 
-root = d3.hierarchy(treeData[0]);
-root.x0 = height / 2;
-root.y0 = 0;
+  // Update the tree layout with the new data
+  treeLayout(root);
 
-update(root);
+  // Calculate the links between the nodes
+  const links = root.links();
 
-function update(source) {
-  const nodes = tree(root).descendants();
-  const links = tree(root).links();
-
-  nodes.forEach(d => (d.y = d.depth * 180));
-
-  const node = svg.selectAll('g.node').data(nodes, d => d.id || (d.id = ++i));
-
-  const nodeEnter = node
-    .enter()
-    .append('g')
-    .attr('class', 'node')
-    .attr('transform', d => `translate(${source.y0},${source.x0})`)
-    .on('click', click);
-
-  nodeEnter.append('circle')
-    .attr('r', 1e-6)
-    .style('fill', d => (d._children ? 'lightsteelblue' : '#fff'));
-
-  nodeEnter.append('text')
-    .attr('x', d => (d.children || d._children ? -13 : 13))
-    .attr('dy', '.35em')
-    .attr('text-anchor', d => (d.children || d._children ? 'end' : 'start'))
-    .text(d => d.data.name)
-    .style('fill-opacity', 1e-6);
-
-  const nodeUpdate = node
-    .merge(nodeEnter)
-    .transition()
-    .duration(duration)
-    .attr('transform', d => `translate(${d.y},${d.x})`);
-
-  nodeUpdate.select('circle')
-    .attr('r', 10)
-    .style('fill', d => (d._children ? 'lightsteelblue' : '#fff'));
-
-  nodeUpdate.select('text').style('fill-opacity', 1);
-
-  const nodeExit = node
-    .exit()
-    .transition()
-    .duration(duration)
-    .attr('transform', d => `translate(${source.y},${source.x})`)
-    .remove();
-
-  nodeExit.select('circle').attr('r', 1e-6);
-
-  nodeExit.select('text').style('fill-opacity', 1e-6);
-
-  const link = svg.selectAll('path.link').data(links, d => d.target.id);
+  // Draw the links
+  const link = svg.selectAll(".link")
+    .data(links, d => d.target.id);
 
   link.enter()
-    .append('path')
-    .attr('class', 'link')
-    .attr('d', d => {
-      const o = { x: source.x0, y: source.y0 };
-      return diagonal({ source: o, target: o });
-    });
+    .append("path")
+    .attr("class", "link")
+    .attr("fill", "none")
+    .attr("stroke", "#ccc")
+    .attr("stroke-opacity", 0.4)
+    .attr("stroke-width", 2)
+    .attr("d", d3.linkVertical()
+      .x(d => d.x)
+      .y(d => d.y));
 
-  link.transition().duration(duration).attr('d', diagonal);
+  link.transition()
+    .duration(500)
+    .attr("d", d3.linkVertical()
+      .x(d => d.x)
+      .y(d => d.y));
 
   link.exit()
     .transition()
-    .duration(duration)
-    .attr('d', d => {
-      const o = { x: source.x, y: source.y };
-      return diagonal({ source: o, target: o });
-    })
+    .duration(500)
+    .attr("d", d3.linkVertical()
+      .x(d => source.x)
+      .y(d => source.y))
     .remove();
 
-  nodes.forEach(d => {
-    d.x0 = d.x;
-    d.y0 = d.y;
-  });
-}
+  // Draw the nodes
+  const node = svg.selectAll(".node")
+    .data(root.descendants(), d => d.id);
 
-function click(d) {
-  if (d.children) {
-    d._children = d.children;
-    d.children = null;
-  } else {
-    d.children = d._children;
-    d._children = null;
-  }
-  update(d);
+  const newNode = node.enter()
+    .append("g")
+    .attr("class", "node")
+    .attr("transform", `translate(${source.x},${source.y})`)
+    .attr("fill-opacity", 0)
+    .attr("stroke-opacity", 0);
+
+  newNode.append("circle")
+    .attr("r", 4)
+    .attr("fill", d => d._children ? "#555" : "#999")
+    .attr("stroke-width", 2)
+    .attr("stroke", "#fff")
+    .on("click", (event, d) => {
+      if (d.children) {
+        d._children = d.children;
+        d.children = null;
+      } else {
+        d.children = d._children;
+        d._children = null;
+      }
+      updateNodes(d);
+    })
+    .on("mouseover", (event, d) => {
+      // Highlight the node on mouseover
+      d3.select(event.currentTarget).attr("fill", "red");
+    })
+    .on("mouseout", (event, d) => {
+      // Unhighlight the node on mouseout
+      d3.select(event.currentTarget).attr("fill", d => d._children ? "#555" : "#999");
+    });
+
+  newNode.append("text")
+    .attr("dy", "0.31em")
+    .attr("x", d => d._children ? -6 : 6)
+    .attr("text-anchor", d => d._children ? "end" : "start")
+    .attr("font-size", "10px")
+    .text(d => d.data.name);
+
+  newNode.transition()
+    .duration(500)
+    .attr("transform", d => `translate(${d.x},${d.y})`)
+    .attr("fill-opacity", 1)
+    .attr("stroke-opacity", 1);
+
+  node.transition()
+    .duration(500)
+    .attr("transform", d => `translate(${d.x},${d.y})`)
+    .attr("fill-opacity", 1)
+    .attr("stroke-opacity", 1);
+
+  node.exit()
+    .transition()
+    .duration(500)
+    .attr("transform", `translate(${source.x},${source.y})`)
+    .attr("fill-opacity", 0)
+    .attr("stroke-opacity", 0)
+    .remove();
 }
