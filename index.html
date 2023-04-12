@@ -1,19 +1,251 @@
-<!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta charset="utf-8">
+<html>
 
-    <title>Tree Example</title>
+<body>
+    <h1
+        style="background-color: #7fea78;border-width: 4px;border-style: solid;border-color: rgb(251, 8, 8);text-align: center;width:800px;right: 20%;">
+          Penny Pinching Pandemic: The Reality of UK's Cost of Living </h1>
+    <h2
+        style="background-color: #b2e9ae;border-width: 4px;border-style: solid;border-color: rgb(241, 61, 169);text-align: center;width:1200px;right: 15%;">
+        The fall in disposable income for families across the world resulting in throngs of families struggling to afford basic
+      necessities of life such as energy, housing , food and beverages is what is termed as the Cost Of Living Crisis. A myriad of factors have their fair share of contributions to this predicament we find ourselves in.
+     Some reasons include stagnant wages unable to keep up with rising prices and income disparity amongst sectors in society. Here, we zoom in on the United Kingdom to see how 
+    people have been impacted by this crisis. </h2>
 
-    <link rel="stylesheet" type="text/css" href="./CSS/dendrostyle.css">
+    <script type='text/javascript' src='./JS/d3.v7.js'></script>
+    <link rel="stylesheet" type="text/css" href="./CSS/Body.css">
 
-  </head>
+    <div id=" mysticdupe"></div>
+    <link rel="stylesheet" type="text/css" href="./CSS/spinmysticdupe.css">
+    <img class="image1" src="./Resources/Images/moneywings.png"></img>
 
-  <body>
-    <svg id="tree"></svg>
+    <div id=" mystic"></div>
+    <link rel="stylesheet" type="text/css" href="./CSS/spinmystic.css">
+    <img class="image2" src="./Resources/Images/moneywings.png"></img>
 
-    <script src="./JS/d3.v7.js"></script>
-    <script src="./JS/dendro_interact.js"></script>
+    <!-- <div class="mytree" id='treeid'></div>
+    <link rel="stylesheet" type="text/css" href="./CSS/tree.css">
+    <script type='text/javascript' src='./JS/tree.js'></script>
 
-  </body>
-</html>
+    <div class="mytreelink" id="trees"> Here we see that China was where COVID-19 began its journey. It then proceeded
+        to
+        other Asian countries and the USA in January 2020 during the time of Chinese New Year which meant flocks of
+        people travelling across the world.
+        In February however, Italy became the epicentre for COVID-19 in Europe.
+    </div>
+    <link rel="stylesheet" type="text/css" href="./CSS/Insights.css"> -->
+
+
+    <div class='mapsvg' id='Mapid'></div>
+    <link rel="stylesheet" type="text/css" href="./CSS/Map.css">
+    <script type='text/javascript' src='./JS/choropleth.js'></script>
+<!-- 
+
+    <div class="paraclass" id="MapInsights">
+        It is evident from the above map that all continents other than Africa have
+        observed a considerably large spike in covid cases overall. Click on each bubble to see the top countries in
+        each continent that contribute to the total cases.
+    </div>
+    <link rel="stylesheet" type="text/css" href="./CSS/Insights.css">
+
+    <div id="lollipop" class="myclass3"></div>
+    <link rel="stylesheet" type="text/css" href="./CSS/Barchart.css">
+    <script type='text/javascript' src='./JS/barcont.js'></script>
+
+
+    <div id="SwitchChartsid"></div>
+    <script type='text/javascript' src='./JS/switchCharts.js'></script>
+
+    <div class="linecss" id='LineChartid' style="display:block">
+        <button onclick="toggleDiv('LineChart')">Switch between Linecharts</button>
+        <div class="LineChartparaclass" id="LineChartid"> Here we can see the growth of new covid
+            cases spanning over a time
+            period of 2019-23.
+            Click on the button above to double down on the timeline with respect to months, days and so on.
+        </div>
+        <link rel="stylesheet" type="text/css" href="./CSS/Insights.css">
+    </div>
+    <link rel="stylesheet" type="text/css" href="./CSS/Linechart.css">
+    <script type='text/javascript' src='./JS/Linechart.js'></script>
+
+    <div class="linecss" id='LineChartZoomid' style="display:none">
+        <button onclick="toggleDiv('LineChart')">Switch between Linecharts</button>
+        <div class="LineChartparaclass" id="LineChartZoomid"> On closer inspection, we see that new cases across the
+            world barely rose to a million in 2020, while it tripled in 2022
+            followed by a substantial spike by a factor of 7 times in 2023 since 2020. The extent to which lockdowns
+            were
+            implemented could have
+            influenced the spike and/or drop in covid cases.
+        </div>
+        <link rel="stylesheet" type="text/css" href="./CSS/Insights.css">
+    </div>
+    <link rel="stylesheet" type="text/css" href="./CSS/Linechart.css">
+    <script type='text/javascript' src='./JS/Linechartzoom.js'></script>
+
+    <h3
+        style="background-color: #b2e9ae;border-width: 4px;border-style: solid;border-color: rgb(241, 61, 169);text-align: center;width:1200px;right: 10%;">
+        Countries adopted various measures to stay afloat amidst the COVID-19 pandemic. Let us look at 3 countries and
+        get a gist of how they have dealt with the pandemic</h3>
+    <div id="Barduo">
+        <div class="myclass" id='BarChartid'>
+
+            <div class="paraclass" id="bar1">
+                NEW CASES
+            </div>
+            <link rel="stylesheet" type="text/css" href="./CSS/Insights.css">
+        </div>
+        <link rel="stylesheet" type="text/css" href="./CSS/Barchart.css">
+        <script type='text/javascript' src='./JS/Barchart.js'></script>
+
+        <div class="myclass2" id='BarChartid2'>
+            <div class="paraclass" id="bar2">
+                NEW DEATHS
+            </div>
+            <link rel="stylesheet" type="text/css" href="./CSS/Insights.css">
+        </div>
+        <link rel="stylesheet" type="text/css" href="./CSS/Barchart.css">
+        <script type='text/javascript' src='./JS/Barchart2.js'></script>
+    </div>
+    <div class="myclass3" id="barswitch">
+        <button onclick="update_bar('population_density');togglebar('bbar1')" , style="float: left;" ,
+            id="bbar1">population_density</button>
+        <button onclick="update_bar('hospital_beds_per_thousand');togglebar('bbar2')" , style="float: left;" ,
+            id="bbar2">hospital_beds_per_thousand</button>
+        <button onclick="update_bar('positive_rate');togglebar('bbar3')" , style="float: left;" ,
+            id="bbar3">positive_rate_avg</button>
+        <button onclick="update_bar('stringency_index');togglebar('bbar4')" , style="float: left;" ,
+            id="bbar4">stringency_index</button>
+        <button onclick="update_bar('tests_per_case_avg');togglebar('bbar5')" , style="float: left;" ,
+            id="bbar5">tests_per_case_avg</button>
+        <script type='text/javascript' src='./JS/Barswitch.js'></script>
+        <link rel="stylesheet" type="text/css" href="./CSS/Barchart.css">
+        <script type='text/javascript' src='./JS/switchCharts.js'></script>
+        <div class="paraclass" id="barchange">
+            POPULATION_DENSITY
+        </div>
+        <link rel="stylesheet" type="text/css" href="./CSS/Insights.css">
+
+    </div>
+    <div class="paraclassbar" id="barswitchInsights">
+        It can be noted that despite a high population density for Singapore, the number of covid cases and deaths
+        remain minimal.
+    </div>
+    <link rel="stylesheet" type="text/css" href="./CSS/Insights.css">
+
+    <h4
+        style="background-color: #b2e9ae;font-size:larger;border-width: 4px;border-style: solid;border-color: rgb(241, 61, 169);text-align: center;width:1200px;right: 10%;">
+        Research is still going on to determine the exact factors that influenced COVID. Let us see if the wealth or
+        geographic position of a
+        country affects the spread of COVID-19.</h4>
+
+    <div class="linecss" id='my_scatter'></div>
+    <link rel="stylesheet" type="text/css" href="./CSS/Linechart.css">
+    <script type='text/javascript' src='./JS/scatter.js'></script>
+    <div class="paraclassbar" id="another">
+        There appears to be a somewhat positive correlation between gdp_per_capita of a country and the spread of
+        COVID-19.
+        However, there is not enough supporting evidence to confirm that this correlation is indeed a causation. Let's
+        now look at
+        the effect of geographic position on spread of the pandemic.
+    </div>
+    <div class="myclass4" id="barswitch2">
+        <button onclick="update_bar_2('coastal_deaths');togglebar2('bbar11')" , style="float: left;" ,
+            id="bbar11">Coastal
+            Regions</button>
+        <button onclick="update_bar_2('island_deaths');togglebar2('bbar22')" , style="float: left;" , id="bbar22">Island
+            Regions</button>
+        <script type='text/javascript' src='./JS/Barswitch2.js'></script>
+        <link rel="stylesheet" type="text/css" href="./CSS/Barchart.css">
+        <script type='text/javascript' src='./JS/switchCharts.js'></script>
+        <div class="paraclass" id="barchange2">
+            COASTAL REGIONS(IN THOUSANDS)
+        </div>
+        <link rel="stylesheet" type="text/css" href="./CSS/Insights.css">
+
+    </div>
+    <div class="paraclassbar" id="barswitchInsights2">
+        When taking geographic position into account, we can see that countries in the coastal regions are affected the
+        most, for instance,America.
+    </div>
+    <link rel="stylesheet" type="text/css" href="./CSS/Insights.css">
+    <h5
+        style="background-color: #b2e9ae;font-size:larger;border-width: 4px;border-style: solid;border-color: rgb(241, 61, 169);text-align: center;width:1200px;right: 10%;">
+        Snapshot of December 2020</h5>
+    <div class="myclass5" id="tree2020">
+        <script type='text/javascript' src='./JS/dendro2020.js'></script>
+        <link rel="stylesheet" type="text/css" href="./CSS/dendro.css">
+    </div>
+    <h6
+        style="background-color: #b2e9ae;font-size:larger;border-width: 4px;border-style: solid;border-color: rgb(241, 61, 169);text-align: center;width:1200px;right: 10%;">
+        Snapshot of December 2021</h6>
+    <div class="myclass5" id="tree2021">
+
+        <script type='text/javascript' src='./JS/dendro2021.js'></script>
+        <link rel="stylesheet" type="text/css" href="./CSS/dendro.css">
+    </div>
+
+
+    <div class="paraclassbar" id="barswitchInsights22">
+        We get to see a snapshot of the end of 2020 and 2021 respectively from the above images. By clustering them on
+        the basis of Covid-19 cases, deaths
+        and more, we see countries converge based on their status against the virus. For instance, in 2020, Australia
+        and Malaysia shared close similarities
+        in the aftermath of COVID. However , in 2021 it was Malaysia and Italy that shared similarities.
+    </div>
+    <link rel="stylesheet" type="text/css" href="./CSS/Insights.css">
+
+    <h7
+        style="background-color: #b2e9ae;font-size:larger;border-width: 4px;border-style: solid;border-color: rgb(241, 61, 169);text-align: center;width:1200px;right: 10%;">
+        In the midst of the pandemic raging on, vaccines started rolling out to public as early as late 2020. Let us
+        observe the effect of vaccines on the cases, and subsequently, the effect of boosters</h7>
+
+    <div class="paraclassbar" id="barswitchInsights212">
+        These are the top 5 vaccines that were administered in the most number of countries across the world, owing to
+        their efficiency in thwarting the virus
+    </div>
+    <div class="myclass4" id='BarChartid9'></div>
+    <link rel="stylesheet" type="text/css" href="./CSS/Insights.css">
+    <script type='text/javascript' src='./JS/vaccines.js'></script>
+    <link rel="stylesheet" type="text/css" href="./CSS/Barchart.css">
+
+    <div class="myclass5" id='BarChartid95'>
+
+        <div class="paraclass" id="bar192">
+            Vaccination/Boosters having a poor effect
+        </div>
+        <link rel="stylesheet" type="text/css" href="./CSS/Insights.css">
+    </div>
+    <link rel="stylesheet" type="text/css" href="./CSS/Barchart.css">
+    <script type='text/javascript' src='./JS/Barchart9.js'></script>
+
+    <div class="paraclassbar" id="barswitchInsights212">
+        For these countries, neither the vaccines nor the boosters produced desirable results.
+        Despite about 127 thousand vaccines on average daily, a total of 82289919 booster doses overall,  for each of these three countries,
+        the average new cases is still at 48751.This is probably due to those countries not having easy access to the top 5 vaccines as mentioned above.
+    </div>
+
+    <div class="myclass5" id='BarChartid20'>
+
+        <div class="paraclass" id="bar199">
+            Vaccination/Boosters having an overall good effect
+        </div>
+        <link rel="stylesheet" type="text/css" href="./CSS/Insights.css">
+    </div>
+    <link rel="stylesheet" type="text/css" href="./CSS/Barchart.css">
+    <script type='text/javascript' src='./JS/Barchart89.js'></script>
+
+    <div class="paraclassbar" id="barswitchInsights212">
+        Across continents, the vaccines and booster doses have done a good job in controlling the COVID-19 cases and deaths.
+    </div>
+    <link rel="stylesheet" type="text/css" href="./CSS/Insights.css">
+
+    <div class="paraclassbar" id="final">
+       COVID-19 has transformed our lives entirely in ways we are still trying to fathom. As we try to stick to what is considered the New
+       normal, we take with us the harsh lessons taught to us by the pandemic. 
+    </div>
+    <link rel="stylesheet" type="text/css" href="./CSS/Insights.css">
+
+
+
+</body>
+
+</html> -->

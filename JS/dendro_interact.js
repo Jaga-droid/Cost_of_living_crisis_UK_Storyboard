@@ -1,127 +1,145 @@
-// Set up the tree layout
-const width = window.innerWidth;
-const height = window.innerHeight;
-const margin = {top: 20, right: 50, bottom: 20, left: 70};
-const treeLayout = d3.tree().size([height, width]);
+// set the dimensions and margins of the diagram
+const tree_margin = {
+    top: 20,
+    right: 150,
+    bottom: 20,
+    left: 170
+  },
+  tree_width = window.innerWidth * 0.9 - tree_margin.left - tree_margin.right,
+  tree_height = window.innerHeight - tree_margin.top - tree_margin.bottom;
 
-// Select the SVG element and set its dimensions
-const svg = d3.select("svg")
-  .attr("width", width + margin.left + margin.right)
-  .attr("height", height + margin.top + margin.bottom)
-  .append("g")
-  .attr("transform", `translate(${margin.left},${margin.top})`);
+// declares a tree layout and assigns the size
+const treemap = d3.tree().size([tree_height, tree_width]);
 
-// Load the data
-d3.json("data.json").then(data => {
 
-  // Assign the data to the root node and collapse it initially
-  const root = d3.hierarchy(data);
-  root.descendants().forEach(d => {
-    d.id = d.data.name; // Assign an ID to each node
-    d._children = d.children;
-    d.children = null;
-  });
+d3.json('https://raw.githubusercontent.com/Jaga-droid/Covid_Data_StoryBoard/main/Resources/DataSet/treedata.json').then(function (treeData) {
 
-  // Call updateNodes to draw the nodes and links
-  updateNodes(root);
-});
+      // Set the x and y scales for the chart
 
-function updateNodes(source) {
+      //  assigns the data to a hierarchy using parent-child relationships
+      let nodes = d3.hierarchy(treeData, d => d.children);
 
-  // Update the tree layout with the new data
-  treeLayout(root);
+      // maps the node data to the tree layout
+      nodes = treemap(nodes);
 
-  // Calculate the links between the nodes
-  const links = root.links();
+      // append the svg object to the body of the page
+      // appends a 'group' element to 'svg'
+      // moves the 'group' element to the top left margin
+      const tree_svg = d3.select("#treeid").append("svg")
+        .attr("width", tree_width + tree_margin.left + tree_margin.right)
+        .attr("height", tree_height + tree_margin.top + tree_margin.bottom),
+        g = tree_svg.append("g")
+        .attr("transform",
+          "translate(" + tree_margin.left + "," + tree_margin.top + ")");
 
-  // Draw the links
-  const link = svg.selectAll(".link")
-    .data(links, d => d.target.id);
+      // adds the links between the nodes
+      const link = g.selectAll(".link")
+        .data(nodes.descendants().slice(1))
+        .enter().append("path")
+        .attr("class", "link")
+        .style("stroke", d => d.data.level)
+        .attr("d", d => {
+          return "M" + d.y + "," + d.x +
+            "C" + (d.y + d.parent.y) / 2 + "," + d.x +
+            " " + (d.y + d.parent.y) / 2 + "," + d.parent.x +
+            " " + d.parent.y + "," + d.parent.x;
+        });
 
-  link.enter()
-    .append("path")
-    .attr("class", "link")
-    .attr("fill", "none")
-    .attr("stroke", "#ccc")
-    .attr("stroke-opacity", 0.4)
-    .attr("stroke-width", 2)
-    .attr("d", d3.linkVertical()
-      .x(d => d.x)
-      .y(d => d.y));
+      // adds each node as a group
+      const node = g.selectAll(".node")
+        .data(nodes.descendants())
+        .enter().append("g")
+        .attr("class", d => "node" + (d.children ? " node--internal" : " node--leaf"))
+        .attr("transform", d => "translate(" + d.y + "," + d.x + ")");
 
-  link.transition()
-    .duration(500)
-    .attr("d", d3.linkVertical()
-      .x(d => d.x)
-      .y(d => d.y));
+      // adds the circle to the node
+      node.append("circle")
+        .attr("r", d => d.data.value)
+        .style("stroke", d => d.data.type)
+        .style("fill", d => d.data.level);
 
-  link.exit()
-    .transition()
-    .duration(500)
-    .attr("d", d3.linkVertical()
-      .x(d => source.x)
-      .y(d => source.y))
-    .remove();
+      // adds the text to the node
+      node.append("text")
+        .attr("dy", ".35em")
+        .attr("x", d => d.children ? (d.data.value + 5) * -1 : d.data.value + 5)
+        .attr("y", d => d.children && d.depth !== 0 ? -(d.data.value + 5) : d)
+        .style("text-anchor", d => d.children ? "end" : "start")
+        .text(d => d.data.name + "  (" + d.data.date + ")");
 
-  // Draw the nodes
-  const node = svg.selectAll(".node")
-    .data(root.descendants(), d => d.id);
+      // adds the click functionality to the nodes
+      node.on("click", function (d) {
+        if (d.children) {
+          d._children = d.children;
+          d.children = null;
+        } else {
+          d.children = d._children;
+          d._children = null;
+        }
+       
+        update(d);
+      });
 
-  const newNode = node.enter()
-    .append("g")
-    .attr("class", "node")
-    .attr("transform", `translate(${source.x},${source.y})`)
-    .attr("fill-opacity", 0)
-    .attr("stroke-opacity", 0);
-
-  newNode.append("circle")
-    .attr("r", 4)
-    .attr("fill", d => d._children ? "#555" : "#999")
-    .attr("stroke-width", 2)
-    .attr("stroke", "#fff")
-    .on("click", (event, d) => {
-      if (d.children) {
-        d._children = d.children;
-        d.children = null;
-      } else {
-        d.children = d._children;
-        d._children = null;
+      const diagonal = d3.linkHorizontal()
+      .x(d => d.y)
+      .y(d => d.x);
+      function update(source) {
+        // assigns the size of the tree again
+        tree_height = window.innerHeight - tree_margin.top - tree_margin.bottom;
+      
+        // updates the x and y scales for the chart
+        treemap.size([tree_height, tree_width]);
+      
+        // updates the location of each node
+        tree = treemap(root);
+      
+        // transitions the nodes and links
+        const nodeUpdate = node.transition()
+          .duration(750)
+          .attr("transform", d => "translate(" + d.y + "," + d.x + ")");
+      
+        nodeUpdate.select("circle")
+          .attr("r", d => d.data.value)
+          .style("stroke", d => d.data.type)
+          .style("fill", d => d.data.level);
+      
+        nodeUpdate.select("text")
+            .style("fill-opacity", 1);
+      
+        const linkUpdate = link.transition()
+            .duration(750)
+            .attr("d", diagonal);
+      
+        linkUpdate.style("stroke", d => d.data.level);
+      
+        // sets the opacity of any nodes that have been collapsed
+        nodeUpdate.select("text")
+          .style("fill-opacity", d => d._children ? 0.5 : 1);
+        
+        // exits any nodes that are no longer needed
+        const nodeExit = node.exit().transition()
+            .duration(750)
+            .attr("transform", d => "translate(" + source.y + "," + source.x + ")")
+            .remove();
+      
+        nodeExit.select("circle")
+          .attr("r", 0);
+      
+        nodeExit.select("text")
+            .style("fill-opacity", 0);
+      
+        // exits any links that are no longer needed
+        const linkExit = link.exit().transition()
+            .duration(750)
+            .attr("d", d => {
+              const o = {x: source.x, y: source.y};
+              return diagonal({source: o, target: o});
+            })
+            .remove();
+      
+        // stores the old positions for transition
+        tree.each(function(d) {
+          d.x0 = d.x;
+          d.y0 = d.y;
+        });
       }
-      updateNodes(d);
-    })
-    .on("mouseover", (event, d) => {
-      // Highlight the node on mouseover
-      d3.select(event.currentTarget).attr("fill", "red");
-    })
-    .on("mouseout", (event, d) => {
-      // Unhighlight the node on mouseout
-      d3.select(event.currentTarget).attr("fill", d => d._children ? "#555" : "#999");
-    });
-
-  newNode.append("text")
-    .attr("dy", "0.31em")
-    .attr("x", d => d._children ? -6 : 6)
-    .attr("text-anchor", d => d._children ? "end" : "start")
-    .attr("font-size", "10px")
-    .text(d => d.data.name);
-
-  newNode.transition()
-    .duration(500)
-    .attr("transform", d => `translate(${d.x},${d.y})`)
-    .attr("fill-opacity", 1)
-    .attr("stroke-opacity", 1);
-
-  node.transition()
-    .duration(500)
-    .attr("transform", d => `translate(${d.x},${d.y})`)
-    .attr("fill-opacity", 1)
-    .attr("stroke-opacity", 1);
-
-  node.exit()
-    .transition()
-    .duration(500)
-    .attr("transform", `translate(${source.x},${source.y})`)
-    .attr("fill-opacity", 0)
-    .attr("stroke-opacity", 0)
-    .remove();
-}
+});
