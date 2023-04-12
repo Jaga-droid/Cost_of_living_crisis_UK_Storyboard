@@ -1,44 +1,53 @@
 <html>
 
 <body>
-    <h1
-        style="background-color: #7fea78;border-width: 4px;border-style: solid;border-color: rgb(251, 8, 8);text-align: center;width:800px;right: 20%;">
-          Penny Pinching Pandemic: The Reality of UK's Cost of Living </h1>
-    <h2
-        style="background-color: #b2e9ae;border-width: 4px;border-style: solid;border-color: rgb(241, 61, 169);text-align: center;width:1200px;right: 15%;">
-        The fall in disposable income for families across the world resulting in throngs of families struggling to afford basic
-      necessities of life such as energy, housing , food and beverages is what is termed as the Cost Of Living Crisis. A myriad of factors have their fair share of contributions to this predicament we find ourselves in.
-     Some reasons include stagnant wages unable to keep up with rising prices and income disparity amongst sectors in society. Here, we zoom in on the United Kingdom to see how 
-    people have been impacted by this crisis. </h2>
+  <h1
+    style="background-color: #7fea78;border-width: 4px;border-style: solid;border-color: rgb(251, 8, 8);text-align: center;width:800px;right: 20%;">
+    Penny Pinching Pandemic: The Reality of UK's Cost of Living </h1>
+  <h2
+    style="background-color: #b2e9ae;border-width: 4px;border-style: solid;border-color: rgb(241, 61, 169);text-align: center;width:1200px;right: 15%;">
+    The fall in disposable income for families across the world resulting in throngs of families struggling to afford
+    basic
+    necessities of life such as energy, housing , food and beverages is what is termed as the Cost Of Living Crisis. A
+    myriad of factors have their fair share of contributions to this predicament we find ourselves in.
+    Some reasons include stagnant wages unable to keep up with rising prices and income disparity amongst sectors in
+    society. Here, we zero in on the United Kingdom. Below is a visual depicting the median house price across regions of the UK. </h2>
 
-    <script type='text/javascript' src='./JS/d3.v7.js'></script>
-    <link rel="stylesheet" type="text/css" href="./CSS/Body.css">
+  <script type='text/javascript' src='./JS/d3.v7.js'></script>
+  <link rel="stylesheet" type="text/css" href="./CSS/Body.css">
 
-    <div id=" mysticdupe"></div>
-    <link rel="stylesheet" type="text/css" href="./CSS/spinmysticdupe.css">
-    <img class="image1" src="./Resources/Images/moneywings.png"></img>
+  <div id=" mysticdupe"></div>
+  <link rel="stylesheet" type="text/css" href="./CSS/spinmysticdupe.css">
+  <img class="image1" src="./Resources/Images/moneywings.png"></img>
 
-    <div id=" mystic"></div>
-    <link rel="stylesheet" type="text/css" href="./CSS/spinmystic.css">
-    <img class="image2" src="./Resources/Images/moneywings.png"></img>
+  <div id=" mystic"></div>
+  <link rel="stylesheet" type="text/css" href="./CSS/spinmystic.css">
+  <img class="image2" src="./Resources/Images/moneywings.png"></img>
 
-    <!-- <div class="mytree" id='treeid'></div>
-    <link rel="stylesheet" type="text/css" href="./CSS/tree.css">
-    <script type='text/javascript' src='./JS/tree.js'></script>
 
-    <div class="mytreelink" id="trees"> Here we see that China was where COVID-19 began its journey. It then proceeded
-        to
-        other Asian countries and the USA in January 2020 during the time of Chinese New Year which meant flocks of
-        people travelling across the world.
-        In February however, Italy became the epicentre for COVID-19 in Europe.
+
+  <div id='houseid'></div>
+  <link rel="stylesheet" type="text/css" href="./CSS/house.css">
+  <img class="image3" src="./Resources/Images/HousePriceViz.png"></img>
+
+
+  <div class="myclass3" id="lineswitch">
+    <button onclick="updateChart('England and Wales')" , style="float: left;" ,
+        id="bbar1">England and Wales</button>
+    <button onclick="updateChart('Scotland')" , style="float: left;" ,
+        id="bbar2">Scotland</button>
+    <button onclick="updateChart('Northern Ireland')" , style="float: left;" ,
+        id="bbar3">Northern Ireland</button>
+  
+    <script type='text/javascript' src='./JS/Linechart.js'></script>
+    <link rel="stylesheet" type="text/css" href="./CSS/Linechart.css">
+    <div class="paraclass" id="barchange">
+        Here, we can see the average price of a house across the UK along with the change in energy bills over a period of 2017-2022.
     </div>
-    <link rel="stylesheet" type="text/css" href="./CSS/Insights.css"> -->
+    <link rel="stylesheet" type="text/css" href="./CSS/Insights.css">
 
-
-    <div class='mapsvg' id='Mapid'></div>
-    <link rel="stylesheet" type="text/css" href="./CSS/Map.css">
-    <script type='text/javascript' src='./JS/choropleth.js'></script>
-<!-- 
+</div>
+  <!-- 
 
     <div class="paraclass" id="MapInsights">
         It is evident from the above map that all continents other than Africa have

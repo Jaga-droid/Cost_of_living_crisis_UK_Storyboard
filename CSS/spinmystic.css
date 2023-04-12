@@ -1,18 +1,16 @@
 .image1 {
-    position: absolute;
-    width: 30;
-    height: 30;
-    top: 8%;
-    left: 3%;
-    margin-top: -50px;
-    margin-left: -50px;
-    background-color: #10d3d3;
-  
-    animation: rotate 1s linear infinite;
+  position: absolute;
+  width: 45;
+  height: 45;
+  top: 8%;
+  left: 3%;
+  margin-top: -50px;
+  margin-left: -50px;
+  animation: rotate 1s linear infinite;
+}
+
+@keyframes rotate {
+  to {
+    transform: rotate(360deg);
   }
-  
-  @keyframes rotate {
-    to {
-      transform: rotate(360deg);
-    }
-  }
+}
