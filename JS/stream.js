@@ -1,59 +1,48 @@
 // set the dimensions and margins of the graph
-const stream_margin = {top: 20, right: 30, bottom: 30, left: 60},
-    stream_width = window.innerWidth - stream_margin.left - stream_margin.right,
-    stream_height = window.innerHeight - stream_margin.top - stream_margin.bottom;
+const area_margin = {top: 20, right: 30, bottom: 30, left: 60},
+    area_width = window.innerWidth*0.8 - area_margin.left - area_margin.right,
+    area_height = window.innerHeight*0.8 - area_margin.top - area_margin.bottom;
 
 // append the svg object to the body of the page
-const svg = d3.select("#stream")
+const area_svg = d3.select("#streamid")
   .append("svg")
-    .attr("width", stream_width + stream_margin.left + stream_margin.right)
-    .attr("height", stream_height + stream_margin.top + stream_margin.bottom)
+    .attr("width", area_width + area_margin.left + area_margin.right)
+    .attr("height", area_height + area_margin.top + area_margin.bottom)
   .append("g")
     .attr("transform",
-          `translate(${stream_margin.left}, ${stream_margin.top})`);
+          `translate(${area_margin.left}, ${area_margin.top})`);
 
-// Parse the Data
-d3.csv("https://raw.githubusercontent.com/holtzy/data_to_viz/master/Example_dataset/5_OneCatSevNumOrdered_wide.csv").then( function(data) {
+d3.csv("https://raw.githubusercontent.com/Jaga-droid/Cost_of_living_crisis_UK_Storyboard/main/Resources/Analysis_Results/housepricetime.csv",
+function (d) {
+  return {
+    Year: d3.timeParse("%Y")(d.Year),
+    AveragePrice: d.AveragePrice
+  }
+}).then( function(data) {
 
-  // List of groups = header of the csv files
-  const keys = data.columns.slice(1)
+   // Add X axis --> it is a date format
+   const x = d3.scaleTime()
+   .domain(d3.extent(data, d => d.Year))
+   .range([ 0, area_width ]);
+   area_svg.append("g")
+     .attr("transform", `translate(0,${area_height})`)
+     .call(d3.axisBottom(x));
 
-  // Add X axis
-  const x = d3.scaleLinear()
-    .domain(d3.extent(data, function(d) { return d.Year; }))
-    .range([ 0, stream_width ]);
-  svg.append("g")
-    .attr("transform", `translate(0, ${stream_height})`)
-    .call(d3.axisBottom(x).ticks(5));
+ // Add Y axis
+ const y = d3.scaleLinear()
+   .domain([0, d3.max(data, d => +d.AveragePrice)])
+   .range([ area_height, 0 ]);
+   area_svg.append("g")
+     .call(d3.axisLeft(y));
 
-  // Add Y axis
-  const y = d3.scaleLinear()
-    .domain([-100000, 100000])
-    .range([ stream_height, 0 ]);
-  svg.append("g")
-    .call(d3.axisLeft(y));
-
-  // color palette
-  const color = d3.scaleOrdinal()
-    .domain(keys)
-    .range(['#e41a1c','#377eb8','#4daf4a','#984ea3','#ff7f00','#ffff33','#a65628','#f781bf'])
-
-  //stack the data?
-  const stackedData = d3.stack()
-    .offset(d3.stackOffsetSilhouette)
-    .keys(keys)
-    (data)
-
-  // Show the areas
-  svg
-    .selectAll("mylayers")
-    .data(stackedData)
-    .join("path")
-      .style("fill", function(d) { return color(d.key); })
-      .attr("d", d3.area()
-        .x(function(d, i) { return x(d.data.year); })
-        .y0(function(d) { return y(d[0]); })
-        .y1(function(d) { return y(d[1]); })
-    )
-
-})
+ // Add the area
+ area_svg.append("path")
+   .datum(data)
+   .attr("fill", "#cce5df")
+   .attr("stroke", "#69b3a2")
+   .attr("stroke-width", 1.5)
+   .attr("d", d3.area()
+     .x(d => x(d.Year))
+     .y0(y(0))
+     .y1(d => y(d.AveragePrice)))
+});
