@@ -4,7 +4,7 @@ const margin = {top: 10, right: 30, bottom: 40, left: 100},
     height = 500 - margin.top - margin.bottom;
 
 // append the svg object to the body of the page
-const svg = d3.select("#my_dataviz")
+const svg = d3.select("#lollipop")
   .append("svg")
     .attr("width", width + margin.left + margin.right)
     .attr("height", height + margin.top + margin.bottom)
@@ -12,26 +12,26 @@ const svg = d3.select("#my_dataviz")
     .attr("transform", `translate(${margin.left}, ${margin.top})`);
 
 // Parse the Data
-d3.csv("https://raw.githubusercontent.com/holtzy/data_to_viz/master/Example_dataset/7_OneCatOneNum_header.csv").then( function(data) {
+d3.csv("https://raw.githubusercontent.com/Jaga-droid/Cost_of_living_crisis_UK_Storyboard/main/Resources/Analysis_Results/mediansalary.csv").then( function(data) {
 
   // Add X axis
-  const x = d3.scaleLinear()
-    .domain([0, 13000])
+  const x1 = d3.scaleLinear()
+    .domain([0, 18])
     .range([ 0, width]);
   svg.append("g")
     .attr("transform", `translate(0, ${height})`)
-    .call(d3.axisBottom(x))
+    .call(d3.axisBottom(x1))
     .selectAll("text")
       .attr("transform", "translate(-10,0)rotate(-45)")
       .style("text-anchor", "end");
 
 // Y axis
-const y = d3.scaleBand()
+const y1 = d3.scaleBand()
   .range([ 0, height ])
-  .domain(data.map(function(d) { return d.Country; }))
+  .domain(data.map(function(d) { return d.Region; }))
   .padding(1);
 svg.append("g")
-  .call(d3.axisLeft(y))
+  .call(d3.axisLeft(y1))
 
 
 // Lines
@@ -39,10 +39,10 @@ svg.selectAll("myline")
   .data(data)
   .enter()
   .append("line")
-    .attr("x1", function(d) { return x(d.Value); })
-    .attr("x2", x(0))
-    .attr("y1", function(d) { return y(d.Country); })
-    .attr("y2", function(d) { return y(d.Country); })
+    .attr("x1", function(d) { return x1(d.value); })
+    .attr("x2", x1(0))
+    .attr("y1", function(d) { return y1(d.Region); })
+    .attr("y2", function(d) { return y1(d.Region); })
     .attr("stroke", "grey")
 
 // Circles
@@ -50,8 +50,8 @@ svg.selectAll("mycircle")
   .data(data)
   .enter()
   .append("circle")
-    .attr("cx", function(d) { return x(d.Value); })
-    .attr("cy", function(d) { return y(d.Country); })
+    .attr("cx", function(d) { return x1(d.value); })
+    .attr("cy", function(d) { return y1(d.Region); })
     .attr("r", "4")
     .style("fill", "#69b3a2")
     .attr("stroke", "black")
