@@ -4,7 +4,7 @@ var scatter_margin = {top: 10, right: 30, bottom: 30, left: 60},
     scatter_height = 400 - scatter_margin.top - scatter_margin.bottom;
 
 // append the svg object to the body of the page
-var scatter_svg = d3.select("#my_dataviz")
+var scatter_svg = d3.select("#scatter")
   .append("svg")
     .attr("width", scatter_width + scatter_margin.left + scatter_margin.right)
     .attr("height", scatter_height + scatter_margin.top + scatter_margin.bottom)
@@ -13,11 +13,11 @@ var scatter_svg = d3.select("#my_dataviz")
           "translate(" + scatter_margin.left + "," + scatter_margin.top + ")");
 
 //Read the data
-d3.csv("https://raw.githubusercontent.com/holtzy/D3-graph-gallery/master/DATA/iris.csv", function(data) {
+d3.csv("https://raw.githubusercontent.com/Jaga-droid/Cost_of_living_crisis_UK_Storyboard/main/Resources/Analysis_Results/minimumwage.csv", function(data) {
 
   // Add X axis
   var x2 = d3.scaleLinear()
-    .domain([4, 8])
+    .domain([15, 64])
     .range([ 0, scatter_width ]);
   scatter_svg.append("g")
     .attr("transform", "translate(0," + scatter_height + ")")
@@ -25,7 +25,7 @@ d3.csv("https://raw.githubusercontent.com/holtzy/D3-graph-gallery/master/DATA/ir
 
   // Add Y axis
   var y2 = d3.scaleLinear()
-    .domain([0, 9])
+    .domain([0, 16])
     .range([ scatter_height, 0]);
   scatter_svg.append("g")
     .call(d3.axisLeft(y2));
